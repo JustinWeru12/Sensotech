@@ -15,6 +15,28 @@ class UserPreferences {
     prefs.setInt('clientID', id);
   }
 
+  static Future<String?> getEmail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString('email');
+    return data;
+  }
+
+  static Future<void> setEmail(String id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('email', id);
+  }
+
+  static Future<String?> getPass() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString('pass');
+    return data;
+  }
+
+  static Future<void> setPass(String id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('pass', id);
+  }
+
   static Future<UserData?> getUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? data = prefs.getString('user');

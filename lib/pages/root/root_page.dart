@@ -93,6 +93,7 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
             } else {
               return LoginSignUpPage(
                 loginCallback: loginCallback,
+                logoutCallback: logOut,
               );
             }
           }

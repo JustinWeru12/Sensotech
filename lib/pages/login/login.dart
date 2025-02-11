@@ -8,12 +8,14 @@ import 'package:sensotech/models/preferences.dart';
 import 'package:sensotech/models/primary_button.dart';
 import 'package:sensotech/models/spacers.dart';
 import 'package:sensotech/models/spinner.dart';
+import 'package:sensotech/pages/homepage/homepage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginSignUpPage extends StatefulWidget {
-  const LoginSignUpPage({super.key, this.loginCallback});
+  const LoginSignUpPage(
+      {super.key, required this.loginCallback, required this.logoutCallback});
 
-  final VoidCallback? loginCallback;
+  final VoidCallback loginCallback, logoutCallback;
   @override
   LoginSignUpPageState createState() => LoginSignUpPageState();
 }
@@ -21,10 +23,12 @@ class LoginSignUpPage extends StatefulWidget {
 class LoginSignUpPageState extends State<LoginSignUpPage>
     with TickerProviderStateMixin {
   static final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
   String? _email;
   String? _password;
   bool _isLoading = false;
+  bool keepLogin = false;
   CrudMethods crudObj = CrudMethods();
 
   bool validateAndSave() {
@@ -36,6 +40,21 @@ class LoginSignUpPageState extends State<LoginSignUpPage>
     return false;
   }
 
+  getLoginDetails() async {
+    var e = await UserPreferences.getEmail();
+    var p = await UserPreferences.getPass();
+    setState(() {
+      _emailTextController.text = e ?? "";
+      _passwordTextController.text = p ?? "";
+    });
+  }
+
+  @override
+  void initState() {
+    getLoginDetails();
+    super.initState();
+  }
+
   // Perform login or signup
   void validateAndSubmit() async {
     if (validateAndSave()) {
@@ -45,8 +64,20 @@ class LoginSignUpPageState extends State<LoginSignUpPage>
       try {
         crudObj.login(_email!, _password!).then((v) {
           UserPreferences.setUser(v);
-          UserPreferences.setClientID(v.sensotechClientId!);
-          widget.loginCallback!();
+          UserPreferences.setEmail(_email ?? "");
+          UserPreferences.setPass(_password ?? "");
+          if (keepLogin) {
+            UserPreferences.setClientID(v.sensotechClientId!);
+            widget.loginCallback();
+          } else {
+            if (mounted) {
+              Helper.slideToPage(
+                  context,
+                  HomePage(
+                      clientId: v.sensotechClientId!,
+                      logoutCallback: widget.logoutCallback));
+            }
+          }
           setState(() {
             _isLoading = false;
           });
@@ -226,6 +257,8 @@ class LoginSignUpPageState extends State<LoginSignUpPage>
             _buildEmailField(),
             smallVerticalSpacer,
             _buildPasswordField(),
+            smallVerticalSpacer,
+            _buildSaveStatus(),
             verticalSpacer,
             _isLoading == false ? submitWidgets() : _showCircularProgress(),
           ],
@@ -253,6 +286,7 @@ class LoginSignUpPageState extends State<LoginSignUpPage>
           enabledBorder: border,
         ),
         style: kregularTextstyle.copyWith(color: kTextColor),
+        controller: _emailTextController,
         keyboardType: TextInputType.emailAddress,
         validator: (String? value) {
           if (value!.isEmpty ||
@@ -377,6 +411,27 @@ class LoginSignUpPageState extends State<LoginSignUpPage>
           ),
         );
       },
+    );
+  }
+
+  Widget _buildSaveStatus() {
+    return CheckboxListTile(
+      title: Text(
+        "Keep me logged in",
+        style: kregularTextstyle.copyWith(
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      value: keepLogin,
+      onChanged: (bool? value) {
+        setState(() {
+          keepLogin = value ?? false;
+        });
+      },
+      contentPadding: EdgeInsets.all(0),
+      checkColor: kTextFallbackColor,
+      activeColor: kPrimaryColor,
+      controlAffinity: ListTileControlAffinity.leading, // Checkbox on the left
     );
   }
 }

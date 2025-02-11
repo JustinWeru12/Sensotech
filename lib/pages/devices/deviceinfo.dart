@@ -67,11 +67,11 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          divider(0.76),
+          divider(0.78),
           headingEntry(),
           smallVerticalSpacer,
           Text(
-            "Capacity Remaining",
+            "Tank Details",
             style: kTitleTextstyle.copyWith(
               // color: kSecondaryColor,
               fontSize: 16,
@@ -79,7 +79,7 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          divider(0.68),
+          divider(0.78),
           smallVerticalSpacer,
           Wrap(
             crossAxisAlignment: WrapCrossAlignment.start,
@@ -107,7 +107,7 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          divider(0.78),
+          divider(0.79),
           smallVerticalSpacer,
           FuelTankWidget(
             percentageFilled: percent.toString(),

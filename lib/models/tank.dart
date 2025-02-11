@@ -27,96 +27,102 @@ class _FuelTankWidgetState extends State<FuelTankWidget> {
     percentageFilled = (double.tryParse(widget.percentageFilled) ?? 0.1) / 100;
     double width = MediaQuery.of(context).size.width;
     var grey = Colors.blueGrey.withValues(alpha: 0.4);
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 14.0),
-          child: SizedBox(
-            width: widget.width ?? width,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    const Spacer(),
-                    topCaps(),
-                    const Spacer(flex: 3),
-                    topCaps(),
-                    const Spacer(),
-                  ],
-                ),
-                const SizedBox(height: 2),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    height: 200,
-                    decoration: BoxDecoration(
-                      color: grey,
-                      border: Border.all(color: Colors.blueGrey),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        // Filled portion
-                        FractionallySizedBox(
-                          heightFactor: percentageFilled,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: percentageFilled > 0 ? widget.color : grey,
-                              borderRadius: const BorderRadius.vertical(
-                                bottom: Radius.circular(20),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 14),
+            child: SizedBox(
+              width: widget.width ?? width,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      const Spacer(),
+                      topCaps(),
+                      const Spacer(flex: 3),
+                      topCaps(),
+                      const Spacer(),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                        color: grey,
+                        border: Border.all(color: Colors.blueGrey),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          // Filled portion
+                          FractionallySizedBox(
+                            heightFactor: percentageFilled,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color:
+                                    percentageFilled > 0 ? widget.color : grey,
+                                borderRadius: const BorderRadius.vertical(
+                                  bottom: Radius.circular(20),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            verticalstruts(),
-                            verticalstruts(),
-                            verticalstruts(),
-                            verticalstruts(),
-                          ],
-                        ),
-                        // Percentage text
-                        Center(
-                          child: Column(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              spacer(),
-                              Text(
-                                '${(percentageFilled * 100).toStringAsFixed(1)}%',
-                                style: kTitleTextstyle.copyWith(
-                                    fontSize: 20, color: Colors.black),
-                              ),
-                              spacer(),
-                              Text(
-                                widget.supplyType,
-                                style: kregularTextstyle.copyWith(
-                                    fontSize: 16, color: Colors.black),
-                              ),
-                              spacer(),
+                              verticalstruts(),
+                              verticalstruts(),
+                              verticalstruts(),
+                              verticalstruts(),
                             ],
                           ),
-                        ),
-                      ],
+                          // Percentage text
+                          Center(
+                            child: Column(
+                              children: [
+                                spacer(),
+                                Text(
+                                  '${(percentageFilled * 100).toStringAsFixed(1)}%',
+                                  style: kTitleTextstyle.copyWith(
+                                      fontSize: 20, color: Colors.black),
+                                ),
+                                spacer(),
+                                Text(
+                                  widget.supplyType,
+                                  style: kregularTextstyle.copyWith(
+                                      fontSize: 16, color: Colors.black),
+                                ),
+                                spacer(),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            bottomCaps(),
-            bottomCaps(),
-            bottomCaps(),
-          ],
-        ),
-      ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              bottomCaps(),
+              SizedBox(),
+              bottomCaps(),
+              SizedBox(),
+              bottomCaps(),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

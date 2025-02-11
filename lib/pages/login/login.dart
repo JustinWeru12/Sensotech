@@ -122,7 +122,7 @@ class LoginSignUpPageState extends State<LoginSignUpPage>
 
   Widget forms() {
     return FlatNeumorphism(
-      radius: 15,
+      radius: 5,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: Column(
@@ -233,7 +233,7 @@ class LoginSignUpPageState extends State<LoginSignUpPage>
   }
 
   OutlineInputBorder border = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(12.0),
+    borderRadius: BorderRadius.circular(5.0),
     borderSide: const BorderSide(color: kFormColor),
   );
 
@@ -310,6 +310,7 @@ class LoginSignUpPageState extends State<LoginSignUpPage>
             color: kPrimaryColor,
             textColor: kBackgroundColor,
             height: 48.0,
+            radius: 5,
             onPressed: validateAndSubmit,
           ),
           smallVerticalSpacer,

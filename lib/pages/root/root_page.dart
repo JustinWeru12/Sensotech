@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:sensotech/controllers/client_controller.dart';
 import 'package:sensotech/models/connection_service.dart';
 import 'package:sensotech/models/helper.dart';
 import 'package:sensotech/models/preferences.dart';
@@ -59,6 +61,7 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
 
   void logOut() {
     UserPreferences.logOut();
+    Get.delete<ClientController>();
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => RootPage()),
         (Route<dynamic> route) => false);

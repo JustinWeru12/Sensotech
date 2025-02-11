@@ -19,55 +19,32 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            sliverAppBar(),
-            SliverList(
-              delegate: SliverChildListDelegate([
-                body(),
-              ] // Example content
-                  ),
-            ),
-          ],
-        ),
+      body: CustomScrollView(
+        slivers: [
+          sliverAppBar(),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              body(),
+            ] // Example content
+                ),
+          ),
+        ],
       ),
     );
   }
 
   SliverAppBar sliverAppBar() {
     return SliverAppBar(
-      expandedHeight: 80.0,
+      expandedHeight: 60.0,
       backgroundColor: Colors.transparent,
+      iconTheme: IconThemeData(color: kBackgroundColor),
       floating: false,
-      leading: SizedBox.shrink(),
       pinned: false,
-      flexibleSpace: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: FlexibleSpaceBar(
-          background: Container(
-            height: 60,
-            margin: const EdgeInsets.only(bottom: 12.0),
-            decoration: BoxDecoration(
-              color: kPrimaryColor,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Center(
-              child: Row(
-                children: [
-                  BackButton(
-                    color: kBackgroundColor,
-                  ),
-                  Expanded(
-                    child: Text(widget.data.name ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: kAppBarstyle.copyWith(color: kBackgroundColor)),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+      title: Text(widget.data.name ?? "",
+          overflow: TextOverflow.ellipsis,
+          style: kAppBarstyle.copyWith(color: kBackgroundColor)),
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(color: kPrimaryColor),
       ),
     );
   }
@@ -80,7 +57,6 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          verticalSpacer,
           smallVerticalSpacer,
           Text(
             "Supply Type",
@@ -93,7 +69,7 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
           ),
           divider(0.76),
           headingEntry(),
-          verticalSpacer,
+          smallVerticalSpacer,
           Text(
             "Capacity Remaining",
             style: kTitleTextstyle.copyWith(
@@ -104,11 +80,11 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
             ),
           ),
           divider(0.68),
-          verticalSpacer,
+          smallVerticalSpacer,
           Wrap(
             crossAxisAlignment: WrapCrossAlignment.start,
             alignment: WrapAlignment.spaceBetween,
-            runSpacing: 20,
+            runSpacing: 10,
             children: [
               infoEntry(
                   "Maximum", "${data.maxCapacity ?? "--"}\nLitres", "Capacity"),
@@ -121,7 +97,6 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
               SizedBox(width: 155, height: 0),
             ],
           ),
-          verticalSpacer,
           verticalSpacer,
           Text(
             "Tank Level",
@@ -148,83 +123,70 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
   Widget headingEntry() {
     var data = widget.data;
     var percent = double.tryParse(data.percentage ?? "0.0") ?? 1;
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: 5,
-            children: [
-              smallVerticalSpacer,
-              Text(
-                data.supplyType ?? "_",
-                style: kregularTextstyle.copyWith(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: 5,
+              children: [
+                smallVerticalSpacer,
+                Text(
+                  data.supplyType ?? "_",
+                  style: kregularTextstyle.copyWith(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-              ),
-              Text(
-                "Updated: ${data.dateOfLastLog ?? "_"}",
-                style: kregularTextstyle.copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
+                Text(
+                  "Updated: ${data.dateOfLastLog ?? "_"}",
+                  style: kregularTextstyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              smallVerticalSpacer,
-            ],
+                smallVerticalSpacer,
+              ],
+            ),
           ),
-        ),
-        CircularPercentIndicator(
-          animation: true,
-          lineWidth: 10.0,
-          radius: 40,
-          percent: percent / 100,
-          backgroundColor: Colors.grey.withValues(alpha: 0.2),
-          progressColor: colorFromStatus(data),
-          circularStrokeCap: CircularStrokeCap.round,
-          center: Text(
-            "$percent%",
-            style: kregularTextstyle.copyWith(fontWeight: FontWeight.w700),
+          CircularPercentIndicator(
+            animation: true,
+            lineWidth: 10.0,
+            radius: 40,
+            percent: percent / 100,
+            backgroundColor: Colors.grey.withValues(alpha: 0.2),
+            progressColor: colorFromStatus(data),
+            circularStrokeCap: CircularStrokeCap.round,
+            center: Text(
+              "$percent%",
+              style: kregularTextstyle.copyWith(fontWeight: FontWeight.w700),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Widget infoEntry(String title, String value, String subtitle) {
     return SizedBox(
-      width: 155,
-      child: Row(
-        spacing: 12.0,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          FlatNeumorphism(
-              radius: 10,
-              color: kPrimaryColor,
-              child: SizedBox(
-                height: 70,
-                width: 70,
-                child: Center(
-                  child: Text(
-                    value,
-                    textAlign: TextAlign.center,
-                    style: kTitleTextstyle.copyWith(
-                      // color: kSecondaryColor,
-                      fontSize: 14,
-                      color: kBackgroundColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              )),
-          SizedBox(
-            height: 50,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  title,
+      width: Helper.setWidth(context) * 0.45,
+      child: FlatNeumorphism(
+        color: kTextFallbackColor,
+        showBorder: true,
+        radius: 5,
+        child: Row(
+          spacing: 12.0,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: 50,
+              width: 60,
+              child: Center(
+                child: Text(
+                  value,
+                  textAlign: TextAlign.center,
                   style: kTitleTextstyle.copyWith(
                     // color: kSecondaryColor,
                     fontSize: 14,
@@ -232,17 +194,38 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Text(
-                  subtitle.isNotEmpty ? subtitle : "_",
-                  style: kregularTextstyle.copyWith(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+            Expanded(
+              child: SizedBox(
+                height: 50,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      title,
+                      style: kTitleTextstyle.copyWith(
+                        // color: kSecondaryColor,
+                        fontSize: 13,
+                        color: kTextColor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Text(
+                      subtitle.isNotEmpty ? subtitle : "_",
+                      style: kregularTextstyle.copyWith(
+                        fontSize: 13,
+                        color: kTextColor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -251,6 +234,7 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
     return Divider(
       color: kPrimaryColor.withValues(alpha: 0.4),
       endIndent: Helper.setWidth(context, factor: factor),
+      height: 2,
     );
   }
 

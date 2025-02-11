@@ -3,10 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 //v2
-const kPrimaryColor = Color(0xFF0A4D9F);
+const kPrimaryColor = Color(0xFF000080);
 const kSecondaryColor = Color(0xFFE81A5E);
 const kTertiaryColor = Color(0xFFEDAD4D);
-const kBackgroundColor = Color(0xFFCEDBEB);
+const kBackgroundColor = Color(0xFFF6F6F6);
 const kTextColor = Color(0xFF000000);
 const kFormColor = Color(0xFFCEEAF5);
 const kOverlayColor = Color(0xFF0A4D9F);

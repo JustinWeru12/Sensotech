@@ -5,7 +5,6 @@ import 'package:sensotech/classes/client.dart';
 import 'package:sensotech/classes/device.dart';
 import 'package:sensotech/constants/theme.dart';
 import 'package:sensotech/models/emptystate.dart';
-import 'package:sensotech/models/header.dart';
 import 'package:sensotech/models/helper.dart';
 import 'package:sensotech/models/neumorphism.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -43,32 +42,51 @@ class _DeviceListState extends State<DeviceList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          sliverAppBar(),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              body(),
-            ] // Example content
-                ),
-          ),
-        ],
+    return RefreshIndicator(
+      onRefresh: () async {
+        await Future.delayed(const Duration(milliseconds: 1500));
+        refreshData();
+      },
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            sliverAppBar(),
+            SliverList(
+              delegate: SliverChildListDelegate([
+                body(),
+              ] // Example content
+                  ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  SliverPersistentHeader sliverAppBar() {
-    return SliverPersistentHeader(
-      delegate: CustomSliverAppBarDelegate(
-          expandedHeight: 220,
-          title: widget.data.name ?? "Depot Details",
-          subTitle: "${widget.data.deviceCount ?? "0"} Devices",
-          image: "assets/images/bg.png",
-          refreshing: refreshing,
-          color: kPrimaryColor,
-          refresh: () => refreshData()),
-      pinned: true,
+  SliverAppBar sliverAppBar() {
+    var deviceCount = widget.data.deviceCount ?? 0;
+    var subtitle =
+        deviceCount == "1" ? "$deviceCount Device" : "$deviceCount Devices";
+    return SliverAppBar(
+      expandedHeight: 60.0,
+      backgroundColor: Colors.transparent,
+      iconTheme: IconThemeData(color: kBackgroundColor),
+      floating: false,
+      pinned: false,
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(widget.data.name ?? "",
+              overflow: TextOverflow.ellipsis,
+              style: kAppBarstyle.copyWith(color: kBackgroundColor)),
+          Text(subtitle,
+              overflow: TextOverflow.ellipsis,
+              style: kAppBarstyle.copyWith(color: kBackgroundColor)),
+        ],
+      ),
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(color: kPrimaryColor),
+      ),
     );
   }
 
@@ -98,7 +116,8 @@ class _DeviceListState extends State<DeviceList> {
               itemBuilder: (c, i) {
                 var device = data[i];
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 4.0),
                   child: devicesCard(device),
                 );
               });
@@ -108,9 +127,9 @@ class _DeviceListState extends State<DeviceList> {
   Widget devicesCard(DeviceData data) {
     var percent = double.tryParse(data.percentage ?? "0.0") ?? 1;
     return InkWell(
-      onTap: () => Helper.scaleToPage(context, DeviceInfoPage(data: data)),
+      onTap: () => Helper.slideToPage(context, DeviceInfoPage(data: data)),
       child: FlatNeumorphism(
-          radius: 20,
+          radius: 5,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -123,7 +142,7 @@ class _DeviceListState extends State<DeviceList> {
                         width: 60,
                         decoration: BoxDecoration(
                             color: kPrimaryColor,
-                            borderRadius: BorderRadius.circular(12)),
+                            borderRadius: BorderRadius.circular(5)),
                         child: Icon(
                           PhosphorIconsBold.broadcast,
                           size: 22,

@@ -58,17 +58,20 @@ class _HomePageState extends State<HomePage>
         }
         _onBackPressed();
       },
-      child: Scaffold(
-        body: Obx(() {
-          clientData = controller.data;
-          if (controller.data.isEmpty) {
-            return const Center(child: ProgressLoader());
-          }
-          return SizedBox(
-            height: Helper.setHeight(context),
-            child: _body(),
-          );
-        }),
+      child: RefreshIndicator(
+        onRefresh: () async {
+          await Future.delayed(const Duration(milliseconds: 1500));
+          getClient();
+        },
+        child: Scaffold(
+          body: Obx(() {
+            clientData = controller.data;
+            if (controller.data.isEmpty) {
+              return const Center(child: ProgressLoader());
+            }
+            return _body();
+          }),
+        ),
       ),
     );
   }
@@ -84,7 +87,7 @@ class _HomePageState extends State<HomePage>
 
   Widget titleSection() {
     return Container(
-      color: kBackgroundColor,
+      color: kPrimaryColor,
       child: Column(
         children: [
           SafeArea(child: Container()),
@@ -102,13 +105,14 @@ class _HomePageState extends State<HomePage>
                         fontWeight: FontWeight.w700,
                         fontSize: 15,
                         height: 1.6,
-                        color: kTextColor),
+                        color: kTextLightColor),
                     children: [
                       TextSpan(
                           text: userData?.fullName ?? "",
                           style: kregularTextstyle.copyWith(
                               fontWeight: FontWeight.w600,
                               fontSize: 12,
+                              color: kTextLightColor,
                               height: 1.2)),
                     ],
                   ),
@@ -132,24 +136,27 @@ class _HomePageState extends State<HomePage>
           title: "No Depots",
           subtitle: "There are no depots associated with your account");
     }
-    return ListView.builder(
-        itemCount: clientData?.length ?? 0,
-        shrinkWrap: true,
-        padding: EdgeInsets.symmetric(vertical: 8.0),
-        itemBuilder: (c, i) {
-          var client = clientData![i];
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: depotCard(client),
-          );
-        });
+    return Expanded(
+      child: ListView.builder(
+          itemCount: clientData?.length ?? 0,
+          shrinkWrap: true,
+          padding: EdgeInsets.only(top: 8.0, bottom: 20.0),
+          itemBuilder: (c, i) {
+            var client = clientData![i];
+            return Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 6.0),
+              child: depotCard(client),
+            );
+          }),
+    );
   }
 
   Widget depotCard(ClientData client) {
     return InkWell(
-      onTap: () => Helper.scaleToPage(context, DeviceList(data: client)),
+      onTap: () => Helper.slideToPage(context, DeviceList(data: client)),
       child: FlatNeumorphism(
-          radius: 20,
+          radius: 5,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -160,7 +167,7 @@ class _HomePageState extends State<HomePage>
                     width: 50,
                     decoration: BoxDecoration(
                         color: kPrimaryColor,
-                        borderRadius: BorderRadius.circular(12)),
+                        borderRadius: BorderRadius.circular(5)),
                     child: Icon(
                       PhosphorIconsBold.gasPump,
                       size: 22,
@@ -195,7 +202,7 @@ class _HomePageState extends State<HomePage>
     return Center(
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12), // Outer circle color
+          borderRadius: BorderRadius.circular(5), // Outer circle color
           border: Border.all(color: color, width: 2), // Outer border
         ),
         child: Padding(
@@ -205,7 +212,7 @@ class _HomePageState extends State<HomePage>
               width: 40, // Inner circle size
               height: 40,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(3),
                 color: color, // Inner circle color
               ),
               child: Center(
@@ -229,7 +236,7 @@ class _HomePageState extends State<HomePage>
           return AlertDialog(
             backgroundColor: kBackgroundColor,
             shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                borderRadius: BorderRadius.all(Radius.circular(5.0))),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

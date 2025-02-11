@@ -1,4 +1,4 @@
-package com.example.sensotech
+package com.sensotech.app
 
 import io.flutter.embedding.android.FlutterActivity
 

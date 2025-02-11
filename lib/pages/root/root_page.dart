@@ -23,9 +23,7 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
 
   void loginCallback() {
     future = UserPreferences.getClientID();
-    future?.then((v) {
-      print("ClientID: $v");
-    });
+    future?.then((v) {});
     if (mounted) setState(() {});
   }
 
@@ -59,6 +57,13 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
     });
   }
 
+  void logOut() {
+    UserPreferences.logOut();
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => RootPage()),
+        (Route<dynamic> route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return future == null ? buildWaitingScreen() : body();
@@ -80,6 +85,7 @@ class _RootPageState extends State<RootPage> with WidgetsBindingObserver {
             } else if (snapshot.hasData && snapshot.data != null) {
               return HomePage(
                 clientId: snapshot.data!,
+                logoutCallback: logOut,
               );
             } else {
               return LoginSignUpPage(

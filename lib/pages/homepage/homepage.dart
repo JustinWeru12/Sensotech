@@ -3,6 +3,7 @@ import 'package:sensotech/classes/client.dart';
 import 'package:sensotech/classes/user.dart';
 import 'package:sensotech/constants/theme.dart';
 import 'package:sensotech/controllers/client_controller.dart';
+import 'package:sensotech/models/avatarmenu.dart';
 import 'package:sensotech/models/emptystate.dart';
 import 'package:sensotech/models/helper.dart';
 import 'package:sensotech/models/neumorphism.dart';
@@ -11,11 +12,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sensotech/models/spacers.dart';
-import 'package:sensotech/pages/depot/detailspage.dart';
+import 'package:sensotech/models/spinner.dart';
+import 'package:sensotech/pages/devices/devicelist.dart';
 
 class HomePage extends StatefulWidget {
   final int clientId;
-  const HomePage({super.key, required this.clientId});
+  final VoidCallback logoutCallback;
+  const HomePage(
+      {super.key, required this.clientId, required this.logoutCallback});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -58,7 +62,7 @@ class _HomePageState extends State<HomePage>
         body: Obx(() {
           clientData = controller.data;
           if (controller.data.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: ProgressLoader());
           }
           return SizedBox(
             height: Helper.setHeight(context),
@@ -112,6 +116,7 @@ class _HomePageState extends State<HomePage>
               ),
               const Spacer(),
               smallHorizontalSpacer,
+              UserAvatarMenu(onLogout: widget.logoutCallback)
             ],
           ),
           verticalSpacer,
@@ -142,7 +147,7 @@ class _HomePageState extends State<HomePage>
 
   Widget depotCard(ClientData client) {
     return InkWell(
-      onTap: () => Helper.scaleToPage(context, DepotDetails(data: client)),
+      onTap: () => Helper.scaleToPage(context, DeviceList(data: client)),
       child: FlatNeumorphism(
           radius: 20,
           child: Padding(

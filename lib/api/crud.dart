@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:sensotech/classes/client.dart';
 import 'package:http/http.dart' as http;
-import 'package:sensotech/classes/depot_details.dart';
+import 'package:sensotech/classes/device.dart';
 import 'package:sensotech/classes/user.dart';
 
 class CrudMethods {
@@ -41,7 +41,6 @@ class CrudMethods {
         'Accept': 'application/json',
       },
     );
-    print(response.body);
     if (response.statusCode == 200) {
       return clientDataFromMap(response.body);
     } else {
@@ -61,7 +60,6 @@ class CrudMethods {
         'Accept': 'application/json',
       },
     );
-    print(response.body);
     if (response.statusCode == 200) {
       return depotDetailsFromMap(response.body);
     } else {

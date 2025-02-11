@@ -53,4 +53,10 @@ class UserPreferences {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
   }
+
+  static Future<void> logOut() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove("user");
+    prefs.remove("clientID");
+  }
 }

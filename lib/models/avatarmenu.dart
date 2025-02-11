@@ -15,15 +15,19 @@ class UserAvatarMenu extends StatelessWidget {
     return PopupMenuButton<int>(
       icon: Container(
         padding: EdgeInsets.all(2),
+        height: 40,
+        width: 40,
         decoration: BoxDecoration(
           color: kPrimaryColor,
-          shape: BoxShape.circle,
+          border: Border.all(color: kBackgroundColor, width: 2),
+          borderRadius: BorderRadius.circular(3),
         ),
-        child: CircleAvatar(
-          backgroundImage: AssetImage(
+        child: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Image.asset(
             "assets/icons/icon.png",
+            fit: BoxFit.contain,
           ),
-          radius: 20,
         ),
       ),
       shape: RoundedRectangleBorder(

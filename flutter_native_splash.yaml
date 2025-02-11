@@ -1,13 +1,13 @@
 flutter_native_splash:
-  color: "#B5C9E5"
+  color: "#393E46"
   image: assets/icons/splash.png
-  color_dark: "#041E3F"
+  color_dark: "#393E46"
   image_dark: assets/icons/splash.png
   android_12:
     image: assets/icons/splash.png
     icon_background_color: "#B5C9E5"
     image_dark: assets/icons/splash.png
-    icon_background_color_dark: "#041E3F"
+    icon_background_color_dark: "#393E46"
   android_gravity: center
   ios_content_mode: center
   fullscreen: true

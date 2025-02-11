@@ -61,6 +61,7 @@ class CrudMethods {
       },
     );
     if (response.statusCode == 200) {
+      print(response.body);
       return depotDetailsFromMap(response.body);
     } else {
       throw Exception("Error while fetching data: ${response.body}");

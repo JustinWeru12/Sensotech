@@ -68,7 +68,9 @@ class _DeviceListState extends State<DeviceList> {
     var subtitle =
         deviceCount == "1" ? "$deviceCount Device" : "$deviceCount Devices";
     return SliverAppBar(
-      expandedHeight: 60.0,
+      expandedHeight: 90.0,
+      collapsedHeight: 90.0,
+      toolbarHeight: 90.0,
       backgroundColor: Colors.transparent,
       iconTheme: IconThemeData(color: kBackgroundColor),
       floating: false,

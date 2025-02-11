@@ -35,7 +35,9 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
 
   SliverAppBar sliverAppBar() {
     return SliverAppBar(
-      expandedHeight: 60.0,
+      expandedHeight: 90.0,
+      collapsedHeight: 90.0,
+      toolbarHeight: 90.0,
       backgroundColor: Colors.transparent,
       iconTheme: IconThemeData(color: kBackgroundColor),
       floating: false,
@@ -174,7 +176,6 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
       width: Helper.setWidth(context) * 0.45,
       child: FlatNeumorphism(
         color: kTextFallbackColor,
-        showBorder: true,
         radius: 5,
         child: Row(
           spacing: 12.0,
